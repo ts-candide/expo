@@ -30,11 +30,13 @@ export class EventEmitter {
     // as they are required by `NativeEventEmitter`. This is only temporary — in the future
     // JSI modules will have event emitter built in.
     if (nativeModule.__expo_module_name__ && NativeModules.EXReactNativeEventEmitter) {
-      nativeModule.addListener = (...args) =>
-        NativeModules.EXReactNativeEventEmitter.addProxiedListener(
+      nativeModule.addListener = (...args) => {
+        console.log('DUPA', nativeModule.__expo_module_name__, args);
+        return NativeModules.EXReactNativeEventEmitter.addProxiedListener(
           nativeModule.__expo_module_name__,
           ...args
         );
+      };
       nativeModule.removeListeners = (...args) =>
         NativeModules.EXReactNativeEventEmitter.removeProxiedListeners(
           nativeModule.__expo_module_name__,

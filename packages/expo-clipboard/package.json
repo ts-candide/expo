@@ -2,7 +2,7 @@
   "name": "expo-clipboard",
   "version": "4.2.0",
   "description": "ExpoClipboard standalone module",
-  "main": "build/Clipboard.js",
+  "main": "src/Clipboard.ts",
   "types": "build/Clipboard.d.ts",
   "scripts": {
     "build": "expo-module build",
