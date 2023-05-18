@@ -38,6 +38,8 @@
 #endif
 
 #define EX_DEV_LAUNCHER_PACKAGER_PATH @"index.bundle?platform=ios&dev=true&minify=false"
+#define EX_DEV_LAUNCHER_URL "http://localhost:8090"
+
 
 
 @interface EXDevLauncherController ()
@@ -54,6 +56,7 @@
 @property (nonatomic, strong) EXDevLauncherErrorManager *errorManager;
 @property (nonatomic, strong) EXDevLauncherInstallationIDHelper *installationIDHelper;
 @property (nonatomic, assign) BOOL isStarted;
+@property (nonatomic, strong) EXDevLauncherBridgeDelegate *bridgeDelegate;
 
 @end
 
@@ -79,6 +82,7 @@
     self.errorManager = [[EXDevLauncherErrorManager alloc] initWithController:self];
     self.installationIDHelper = [EXDevLauncherInstallationIDHelper new];
     self.shouldPreferUpdatesInterfaceSourceUrl = NO;
+    self.bridgeDelegate = [EXDevLauncherBridgeDelegate new];
     [EXDevLauncherNetworkLogger.shared enable];
   }
   return self;
@@ -108,7 +112,6 @@
 }
 
 // Expo developers: Enable the below code by running
-//     export EX_DEV_LAUNCHER_URL=http://localhost:8090
 // in your shell before doing pod install. This will cause the controller to see if
 // the expo-launcher packager is running, and if so, use that instead of
 // the prebuilt bundle.
@@ -277,7 +280,7 @@
 
   [self _removeInitModuleObserver];
   UIApplication *application = [UIApplication sharedApplication];
-  UIView *rootView = [EXDevLauncherBridgeDelegate createRootViewWithModuleName:@"main" launchOptions:_launchOptions application:application];
+  UIView *rootView = [_bridgeDelegate createRootViewWithModuleName:@"main" launchOptions:_launchOptions application:application];
 
   [self _ensureUserInterfaceStyleIsInSyncWithTraitEnv:rootView];
 
@@ -689,21 +692,21 @@
 
 - (void)setDevMenuAppBridge
 {
-  DevMenuManager *manager = [DevMenuManager shared];
-  manager.currentBridge = self.appBridge;
-
-  if (self.manifest != nil) {
-    manager.currentManifest = self.manifest;
-    manager.currentManifestURL = self.manifestURL;
-  }
+//  DevMenuManager *manager = [DevMenuManager shared];
+//  manager.currentBridge = self.appBridge;
+//
+//  if (self.manifest != nil) {
+//    manager.currentManifest = self.manifest;
+//    manager.currentManifestURL = self.manifestURL;
+//  }
 }
 
 - (void)invalidateDevMenuApp
 {
-  DevMenuManager *manager = [DevMenuManager shared];
-  manager.currentBridge = nil;
-  manager.currentManifest = nil;
-  manager.currentManifestURL = nil;
+//  DevMenuManager *manager = [DevMenuManager shared];
+//  manager.currentBridge = nil;
+//  manager.currentManifest = nil;
+//  manager.currentManifestURL = nil;
 }
 
 -(NSDictionary *)getUpdatesConfig
