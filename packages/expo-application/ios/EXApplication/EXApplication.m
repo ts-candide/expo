@@ -1,7 +1,9 @@
 // Copyright 2018-present 650 Industries. All rights reserved.
+
+#import <ExpoModulesCore/Platform.h>
 #import <ExpoModulesCore/EXUtilities.h>
+
 #import <EXApplication/EXApplication.h>
-#import <UIKit/UIKit.h>
 #import <EXApplication/EXProvisioningProfile.h>
 
 @implementation EXApplication
@@ -15,7 +17,11 @@ EX_EXPORT_MODULE(ExpoApplication);
 
 EX_EXPORT_METHOD_AS(getIosIdForVendorAsync, getIosIdForVendorAsyncWithResolver:(EXPromiseResolveBlock)resolve rejecter:(EXPromiseRejectBlock)reject)
 {
+#if TARGET_OS_OSX
+  resolve([NSNull null]);
+#else
   resolve([[UIDevice currentDevice].identifierForVendor UUIDString]);
+#endif
 }
 
 EX_EXPORT_METHOD_AS(getInstallationTimeAsync, getInstallationTimeAsyncWithResolver:(EXPromiseResolveBlock)resolve rejecter:(EXPromiseRejectBlock)reject)
