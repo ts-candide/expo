@@ -1,5 +1,3 @@
-import UIKit
-
 /**
  The app context is an interface to a single Expo app.
  */
@@ -195,11 +193,21 @@ public final class AppContext: NSObject {
    Starts listening to `UIApplication` notifications.
    */
   private func listenToClientAppNotifications() {
-    [
+#if os(OSX)
+    let notifications = [
+      UIApplication.willUnhideNotification,
+      UIApplication.didBecomeActiveNotification,
+      UIApplication.didHideNotification
+    ]
+#else
+    let notifications = [
       UIApplication.willEnterForegroundNotification,
       UIApplication.didBecomeActiveNotification,
       UIApplication.didEnterBackgroundNotification
-    ].forEach { name in
+    ]
+#endif
+
+    notifications.forEach { name in
       NotificationCenter.default.addObserver(self, selector: #selector(handleClientAppNotification(_:)), name: name, object: nil)
     }
   }
@@ -210,12 +218,21 @@ public final class AppContext: NSObject {
   @objc
   private func handleClientAppNotification(_ notification: Notification) {
     switch notification.name {
+#if os(OSX)
+      case UIApplication.willUnhideNotification:
+        moduleRegistry.post(event: .appEntersForeground)
+      case UIApplication.didBecomeActiveNotification:
+        moduleRegistry.post(event: .appBecomesActive)
+      case UIApplication.didHideNotification:
+        moduleRegistry.post(event: .appEntersBackground)
+#else
     case UIApplication.willEnterForegroundNotification:
       moduleRegistry.post(event: .appEntersForeground)
     case UIApplication.didBecomeActiveNotification:
       moduleRegistry.post(event: .appBecomesActive)
     case UIApplication.didEnterBackgroundNotification:
       moduleRegistry.post(event: .appEntersBackground)
+#endif
     default:
       return
     }
