@@ -6,6 +6,7 @@ import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
 import expo.modules.splashscreen.exceptions.NoContentViewException
+import expo.modules.splashscreen.singletons.SplashScreen
 import java.lang.ref.WeakReference
 
 const val SEARCH_FOR_ROOT_VIEW_INTERVAL = 20L
@@ -118,6 +119,7 @@ open class SplashScreenViewController(
         if (rootView?.childCount == 1) {
           if (autoHideEnabled) {
             hideSplashScreen()
+            SplashScreen.showing = false
           }
         }
       }

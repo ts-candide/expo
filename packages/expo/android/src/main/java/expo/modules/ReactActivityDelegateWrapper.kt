@@ -87,20 +87,23 @@ class ReactActivityDelegateWrapper(
       return
     }
 
-    val delayLoadAppHandler = reactActivityHandlers.asSequence()
+    val delayLoadAppHandlers = reactActivityHandlers.asSequence()
       .mapNotNull { it.getDelayLoadAppHandler(activity, host) }
-      .firstOrNull()
-    if (delayLoadAppHandler != null) {
-      delayLoadAppHandler.whenReady {
-        invokeDelegateMethod<Unit, String?>("loadApp", arrayOf(String::class.java), arrayOf(appKey))
-        if (shouldEmitPendingResume) {
-          onResume()
+
+    var delayHandlersFired = 0
+    delayLoadAppHandlers.forEach {
+      it.whenReady {
+        delayHandlersFired = delayHandlersFired + 1
+        if (delayHandlersFired == delayLoadAppHandlers.count()) {
+          invokeDelegateMethod<Unit, String?>("loadApp", arrayOf(String::class.java), arrayOf(appKey))
+          if (shouldEmitPendingResume) {
+            onResume()
+          }
         }
       }
-      return
     }
 
-    return invokeDelegateMethod("loadApp", arrayOf(String::class.java), arrayOf(appKey))
+    // return invokeDelegateMethod("loadApp", arrayOf(String::class.java), arrayOf(appKey))
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {

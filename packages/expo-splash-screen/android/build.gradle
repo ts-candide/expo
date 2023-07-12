@@ -5,6 +5,29 @@ apply plugin: 'maven-publish'
 group = 'host.exp.exponent'
 version = '0.20.2'
 
+// Utility method to derive boolean values from the environment or from Java properties,
+// and return them as strings to be used in BuildConfig fields
+def get_bool_string_value_from_prop_or_env(String name, Boolean defaultValue) {
+  def env_value = System.getenv(name)
+  def prop_value = findProperty(name)
+  def value = defaultValue.toString()
+  // If present, property value in gradle.properties overrides default
+  if (prop_value != null) {
+    value = boolish(prop_value).toString()
+    System.out.println("expo-updates: Value of ${name} was overridden by property, new value = ${value}")
+  }
+  // If present, env value overrides default and gradle.properties
+  if (env_value != null) {
+    value = boolish(env_value).toString()
+    System.out.println("expo-updates: Value of ${name} was overridden by environment, new value = ${value}")
+  }
+  return value
+}
+
+// If true, code will run that delays app loading until updates is initialized, to prevent ANR issues.
+// (default true)
+def ex_updates_android_delay_load_app = get_bool_string_value_from_prop_or_env("EX_UPDATES_ANDROID_DELAY_LOAD_APP", true)
+
 buildscript {
   def expoModulesCorePlugin = new File(project(":expo-modules-core").projectDir.absolutePath, "ExpoModulesCorePlugin.gradle")
   if (expoModulesCorePlugin.exists()) {
@@ -68,6 +91,7 @@ android {
     targetSdkVersion safeExtGet("targetSdkVersion", 33)
     versionCode 17
     versionName '0.20.2'
+    buildConfigField("boolean", "EX_UPDATES_ANDROID_DELAY_LOAD_APP", ex_updates_android_delay_load_app)
   }
   lintOptions {
     abortOnError false

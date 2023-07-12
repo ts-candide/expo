@@ -14,6 +14,8 @@ object SplashScreen : SingletonModule {
     return "SplashScreen"
   }
 
+  var showing: Boolean = true
+
   private val controllers = WeakHashMap<Activity, SplashScreenViewController>()
 
   /**
