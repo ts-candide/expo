@@ -7,6 +7,7 @@
 ### 🎉 New features
 
 - Forward exact Metro server error during static rendering. ([#23909](https://github.com/expo/expo/pull/23909) by [@EvanBacon](https://github.com/EvanBacon))
+- Add `expo run` command to select platform to run. ([#23514](https://github.com/expo/expo/pull/23514) by [@byCedric](https://github.com/byCedric))
 
 ### 🐛 Bug fixes
 
