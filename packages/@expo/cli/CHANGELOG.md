@@ -14,7 +14,7 @@
 - Fixed JavaScript Inspector does not work on Windows. ([#23367](https://github.com/expo/expo/pull/23367) by [@kudo](https://github.com/kudo))
 - Fixed route types generation on Windows not working. ([#23386](https://github.com/expo/expo/pull/23386) by [@gsporto](https://github.com/gsporto) and [@marklawlor](https://github.com/marklawlor))
 - Added additional guard to prevent invalid route files type generation. ([#23694](https://github.com/expo/expo/pull/23694) by [@marklawlor](https://github.com/marklawlor))
-- Make `NODE_ENV` from built type case insensitive.
+- Make `NODE_ENV` from built type case insensitive. ([#23716](https://github.com/expo/expo/pull/23716) by [@byCedric](https://github.com/byCedric))
 
 ### 💡 Others
 
