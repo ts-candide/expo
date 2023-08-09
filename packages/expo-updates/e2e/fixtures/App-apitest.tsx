@@ -1,29 +1,37 @@
 /**
  * Test app that shows some features of the Updates API
  */
+import { Camera, CameraType, PermissionResponse } from 'expo-camera';
 import { StatusBar } from 'expo-status-bar';
 import * as Updates from 'expo-updates';
 import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
-  const [showingView1, setShowingView1] = useState(true);
-  const [showingView2, setShowingView2] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
+  useEffect(() => {
+    const handleAsync = async () => {
+      let permission: PermissionResponse =
+        await Camera.getCameraPermissionsAsync();
+      if (!permission.granted) {
+        if (permission.canAskAgain) {
+          permission = await Camera.requestCameraPermissionsAsync();
+        }
+      }
+      if (permission.granted) {
+        setShowCamera(true);
+      }
+    };
+  }, []);
   return (
     <View style={styles.container}>
       <Text style={styles.titleText}>Updates JS API test</Text>
-      <Pressable
-        style={styles.button}
-        onPress={() => setShowingView1((showingView1) => !showingView1)}>
-        <Text style={styles.buttonText}>Toggle view 1</Text>
-      </Pressable>
-      <Pressable
-        style={styles.button}
-        onPress={() => setShowingView2((showingView2) => !showingView2)}>
-        <Text style={styles.buttonText}>Toggle view 2</Text>
-      </Pressable>
-      {showingView1 ? <UpdatesStatusView index={1} /> : null}
-      {showingView2 ? <UpdatesStatusView index={2} /> : null}
+      <UpdatesStatusView index={1} />
+      {showCamera ? (
+        <Camera type={CameraType.back} />
+      ) : (
+        <Text>You do not have permission to access the camera.</Text>
+      )}
     </View>
   );
 }
@@ -67,11 +75,16 @@ function UpdatesStatusView(props: { index: number }) {
     const availableMessage = isUpdateAvailable
       ? isRollback
         ? 'Rollback directive found\n'
-        : `Found a new update: manifest = \n${manifestToString(availableUpdate?.manifest)}...` +
-          '\n'
+        : `Found a new update: manifest = \n${manifestToString(
+            availableUpdate?.manifest,
+          )}...` + '\n'
       : 'No new update available\n';
-    const checkErrorMessage = checkError ? `Error in check: ${checkError.message}\n` : '';
-    const downloadErrorMessage = downloadError ? `Error in check: ${downloadError.message}\n` : '';
+    const checkErrorMessage = checkError
+      ? `Error in check: ${checkError.message}\n`
+      : '';
+    const downloadErrorMessage = downloadError
+      ? `Error in check: ${downloadError.message}\n`
+      : '';
     const lastCheckTimeMessage = lastCheckForUpdateTimeSinceRestart
       ? `Last check: ${lastCheckForUpdateTimeSinceRestart.toLocaleString()}\n`
       : '';
@@ -81,7 +94,7 @@ function UpdatesStatusView(props: { index: number }) {
         availableMessage +
         checkErrorMessage +
         downloadErrorMessage +
-        lastCheckTimeMessage
+        lastCheckTimeMessage,
     );
   }, [
     isUpdateAvailable,
@@ -97,7 +110,9 @@ function UpdatesStatusView(props: { index: number }) {
     const handleReloadAsync = async () => {
       let countdown = 5;
       while (countdown > 0) {
-        setUpdateMessage(`Downloaded update... launching it in ${countdown} seconds.`);
+        setUpdateMessage(
+          `Downloaded update... launching it in ${countdown} seconds.`,
+        );
         countdown = countdown - 1;
         await delay(1000);
       }
@@ -194,7 +209,7 @@ const manifestToString = (manifest?: Updates.Manifest) => {
           // metadata: manifest.metadata,
         },
         null,
-        2
+        2,
       )
     : 'null';
 };

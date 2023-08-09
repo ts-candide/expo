@@ -8,7 +8,7 @@ const workingDir = path.resolve(repoRoot, '..');
 /*
  * Change this to your own Expo account name
  */
-const EXPO_ACCOUNT_NAME = process.env.EXPO_ACCOUNT_NAME || 'myusername';
+// const EXPO_ACCOUNT_NAME = process.env.EXPO_ACCOUNT_NAME || 'myusername';
 
 /**
  * This generates a project at the location TEST_PROJECT_ROOT,
@@ -22,7 +22,6 @@ function transformAppJson(appJson, projectName, runtimeVersion) {
       ...appJson.expo,
       name: projectName,
       runtimeVersion,
-      jsEngine: 'jsc',
       updates: {
         ...appJson.expo.updates,
         requestHeaders: {
@@ -31,11 +30,11 @@ function transformAppJson(appJson, projectName, runtimeVersion) {
       },
       android: {
         ...appJson.expo.android,
-        package: `com.${EXPO_ACCOUNT_NAME}.${projectName}`,
+        package: `com.${projectName}`,
       },
       ios: {
         ...appJson.expo.ios,
-        bundleIdentifier: `com.${EXPO_ACCOUNT_NAME}.${projectName}`,
+        bundleIdentifier: `com.${projectName}`,
       },
     },
   };
