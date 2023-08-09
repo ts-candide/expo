@@ -34,11 +34,11 @@ export async function preventAutoHideAsync(): Promise<boolean> {
  * to display when you hide the splash screen, or you may see a blank screen briefly. See the
  * ["Usage"](#usage) section for an example.
  */
-export async function hideAsync(): Promise<boolean> {
+export async function hideAsync(options?: any): Promise<boolean> {
   if (!ExpoSplashScreen.hideAsync) {
     throw new UnavailabilityError('expo-splash-screen', 'hideAsync');
   }
-  return await ExpoSplashScreen.hideAsync();
+  return await ExpoSplashScreen.hideAsync(options);
 }
 
 /**

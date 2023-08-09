@@ -22,7 +22,7 @@ export declare function preventAutoHideAsync(): Promise<boolean>;
  * to display when you hide the splash screen, or you may see a blank screen briefly. See the
  * ["Usage"](#usage) section for an example.
  */
-export declare function hideAsync(): Promise<boolean>;
+export declare function hideAsync(options?: any): Promise<boolean>;
 /**
  * @deprecated Use `SplashScreen.hideAsync()` instead
  * @ignore
