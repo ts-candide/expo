@@ -2241,6 +2241,8 @@ PODS:
     - ExpoModulesCore
   - ExpoBrightness (11.6.0):
     - ExpoModulesCore
+  - ExpoCalendar (12.0.0):
+    - ExpoModulesCore
   - ExpoCellular (5.5.0):
     - ExpoModulesCore
   - ExpoClipboard (4.6.0):
@@ -3456,7 +3458,6 @@ DEPENDENCIES:
   - EXAV (from `../packages/expo-av/ios`)
   - EXBarCodeScanner (from `../packages/expo-barcode-scanner/ios`)
   - EXBranch (from `../packages/expo-branch/ios`)
-  - EXCalendar (from `../packages/expo-calendar/ios`)
   - EXCamera (from `../packages/expo-camera/ios`)
   - EXConstants (from `../packages/expo-constants/ios`)
   - EXContacts (from `../packages/expo-contacts/ios`)
@@ -3476,6 +3477,7 @@ DEPENDENCIES:
   - ExpoBattery (from `../packages/expo-battery/ios`)
   - ExpoBlur (from `../packages/expo-blur/ios`)
   - ExpoBrightness (from `../packages/expo-brightness/ios`)
+  - ExpoCalendar (from `../packages/expo-calendar/ios`)
   - ExpoCellular (from `../packages/expo-cellular/ios`)
   - ExpoClipboard (from `../packages/expo-clipboard/ios`)
   - ExpoClipboard/Tests (from `../packages/expo-clipboard/ios`)
@@ -4328,8 +4330,6 @@ EXTERNAL SOURCES:
     :path: "../packages/expo-barcode-scanner/ios"
   EXBranch:
     :path: "../packages/expo-branch/ios"
-  EXCalendar:
-    :path: "../packages/expo-calendar/ios"
   EXCamera:
     :path: "../packages/expo-camera/ios"
   EXConstants:
@@ -4364,6 +4364,8 @@ EXTERNAL SOURCES:
     :path: "../packages/expo-blur/ios"
   ExpoBrightness:
     :path: "../packages/expo-brightness/ios"
+  ExpoCalendar:
+    :path: "../packages/expo-calendar/ios"
   ExpoCellular:
     :path: "../packages/expo-cellular/ios"
   ExpoClipboard:
@@ -4933,6 +4935,7 @@ SPEC CHECKSUMS:
   ExpoBattery: 5f17ec31ec27b8a59f4c87ffe6e69fdbbf4a7cc0
   ExpoBlur: d43fee34125da1454e00044c5cee2dc7dc4e9efc
   ExpoBrightness: 6cdb6f59c20270048404443fbd5a65a2b6b5d9fb
+  ExpoCalendar: a11c0e2ad42584d1f4546ebfe7aaf38fc969cc4f
   ExpoCellular: fcb9bc581cab254b63bfcffa60de0abd4e63550b
   ExpoClipboard: 6729cb7ff3f999bf555960a4f3b17dd6b0d919f2
   ExpoCrypto: 42485127a5968dda6f67ac5f2b42d3c0af31d7db
