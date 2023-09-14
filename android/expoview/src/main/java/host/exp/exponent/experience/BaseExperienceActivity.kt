@@ -13,6 +13,7 @@ import host.exp.exponent.kernel.*
 import host.exp.exponent.kernel.ExponentErrorMessage.Companion.developerErrorMessage
 import host.exp.exponent.utils.AsyncCondition
 import host.exp.exponent.utils.AsyncCondition.AsyncConditionListener
+import host.exp.exponent.storage.ExponentSharedPreferences
 import host.exp.expoview.Exponent
 import javax.inject.Inject
 
@@ -136,6 +137,7 @@ abstract class BaseExperienceActivity : MultipleVersionReactNativeActivity() {
       if (errorQueue.isEmpty()) {
         return@runOnUiThread
       }
+      kernel.exponentSharedPreferences.setLong(ExponentSharedPreferences.ExponentSharedPreferencesKey.LAST_FATAL_ERROR_DATE_KEY, System.currentTimeMillis())
       val (isFatal, errorMessage, errorHeader) = sendErrorsToErrorActivity()
       if (!shouldShowErrorScreen(errorMessage)) {
         return@runOnUiThread
