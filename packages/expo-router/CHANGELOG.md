@@ -6,6 +6,8 @@
 
 ### 🎉 New features
 
+- Warn in development when a path and query parameter with the same name is used.
+
 ### 🐛 Bug fixes
 
 ### 💡 Others

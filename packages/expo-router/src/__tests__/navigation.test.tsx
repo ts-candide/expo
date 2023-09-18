@@ -14,8 +14,6 @@ import { Stack } from '../layouts/Stack';
 import { Tabs } from '../layouts/Tabs';
 import { act, fireEvent, renderRouter, screen } from '../testing-library';
 
-afterEach(() => jest.clearAllMocks());
-
 describe('hooks only', () => {
   it('can handle navigation between routes', async () => {
     renderRouter({
