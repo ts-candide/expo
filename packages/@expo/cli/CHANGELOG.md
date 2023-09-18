@@ -8,7 +8,7 @@
 
 ### 🐛 Bug fixes
 
-- Remove the 404 route from typed routes
+- Remove the 404 route from typed routes ([#24496](https://github.com/expo/expo/pull/24496) by [@marklawlor](https://github.com/marklawlor))
 
 ### 💡 Others
 
