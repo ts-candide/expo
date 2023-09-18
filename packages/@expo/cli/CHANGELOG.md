@@ -6,6 +6,8 @@
 
 ### 🎉 New features
 
+- New env EXPO_TV allows switching to TV template. ([#24485](https://github.com/expo/expo/pull/24485) by [@douglowder](https://github.com/douglowder))
+
 ### 🐛 Bug fixes
 
 - Fix SPA web mode in Expo Router. ([#24472](https://github.com/expo/expo/pull/24472) by [@EvanBacon](https://github.com/EvanBacon))
