@@ -6,7 +6,7 @@
 
 ### 🎉 New features
 
-- Warn in development when a path and query parameter with the same name is used.
+- Warn in development when a path and query parameter with the same name is used. ([#24386](https://github.com/expo/expo/pull/24386) by [@marklawlor](https://github.com/marklawlor))
 
 ### 🐛 Bug fixes
 
