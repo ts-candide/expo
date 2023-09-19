@@ -2,6 +2,7 @@ import { ExpoConfig, getConfig } from '@expo/config';
 import chalk from 'chalk';
 
 import { validateDependenciesVersionsAsync } from './doctor/dependencies/validateDependenciesVersions';
+import { TVSupportProjectPrerequisite } from './doctor/tv/TVSupportProjectPrerequisite';
 import { WebSupportProjectPrerequisite } from './doctor/web/WebSupportProjectPrerequisite';
 import { startInterfaceAsync } from './interface/startInterface';
 import { Options, resolvePortsAsync } from './resolveOptions';
@@ -84,6 +85,9 @@ export async function startAsync(
   const devServerManager = new DevServerManager(projectRoot, defaultOptions);
 
   // Validations
+
+  // TV
+  await devServerManager.ensureProjectPrerequisiteAsync(TVSupportProjectPrerequisite);
 
   if (options.web || settings.webOnly) {
     await devServerManager.ensureProjectPrerequisiteAsync(WebSupportProjectPrerequisite);
