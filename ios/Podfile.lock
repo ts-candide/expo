@@ -2199,8 +2199,6 @@ PODS:
     - Branch (= 0.35.0)
     - ExpoModulesCore
     - React-Core
-  - EXCalendar (12.0.0):
-    - ExpoModulesCore
   - EXCamera (13.7.0):
     - ExpoModulesCore
   - EXConstants (15.1.0):
@@ -4917,7 +4915,6 @@ SPEC CHECKSUMS:
   EXAV: d3419a360093a55581a0426f4c0090f34a392de4
   EXBarCodeScanner: 296dd50f6c03928d1d71d37ea17473b304cfdb00
   EXBranch: 42d596fd1f7683b6591980ca4453b35ba13a83b5
-  EXCalendar: f4dac0aa190d359f20652659707f5cc307656b6d
   EXCamera: 3302fc0e5188a47a2272a439acef7d9a5248a67c
   EXConstants: 2a5b45fc0f6eccd4351349eadb0c022b735329ae
   EXContacts: 80f3433f7403286a87c105208348423e109ccb8d
