@@ -8,6 +8,8 @@
 
 ### 🐛 Bug fixes
 
+- Only modify quoted or prefixed android package names.
+
 ### 💡 Others
 
 ## 7.5.0 — 2023-09-15
