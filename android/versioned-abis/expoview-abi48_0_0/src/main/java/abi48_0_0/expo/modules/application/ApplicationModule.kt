@@ -18,6 +18,11 @@ import abi48_0_0.expo.modules.core.Promise
 import abi48_0_0.expo.modules.core.interfaces.ActivityProvider
 import abi48_0_0.expo.modules.core.interfaces.ExpoMethod
 import abi48_0_0.expo.modules.core.interfaces.RegistryLifecycleListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 import java.util.*
 
@@ -64,6 +69,14 @@ class ApplicationModule(private val mContext: Context) : ExportedModule(mContext
 
   @ExpoMethod
   fun getInstallationTimeAsync(promise: Promise) {
+    GlobalScope.launch(Dispatchers.IO) {
+      delay(10000) // Delay for 10 seconds
+      withContext(Dispatchers.Main) {
+        Log.i("tag", "This'll run 10 seconds later")
+        // throw RuntimeException("This is a crash")
+      }
+    }
+
     val packageManager = mContext.packageManager
     val packageName = mContext.packageName
     try {
