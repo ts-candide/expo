@@ -26,6 +26,8 @@
     "config.d.ts",
     "config-plugins.js",
     "config-plugins.d.ts",
+    "devtools.js",
+    "devtools.d.ts",
     "react-native.config.js",
     "requiresExtraSetup.json",
     "tsconfig.base.json"
@@ -60,6 +62,7 @@
     "@expo/cli": "0.13.2",
     "@expo/config": "8.3.1",
     "@expo/config-plugins": "7.5.0",
+    "@expo/devtools": "0.0.1",
     "@expo/vector-icons": "^13.0.0",
     "babel-preset-expo": "~9.7.0",
     "expo-application": "~5.5.0",
