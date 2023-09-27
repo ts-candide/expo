@@ -1,0 +1,1 @@
+{"version":3,"file":"WebSocket.js","sourceRoot":"","sources":["../src/WebSocket.ts"],"names":[],"mappings":"AAAA;;;GAGG;AACH,eAAe,UAAU,CAAC,SAAS,CAAC","sourcesContent":["/**\n * WebSocket wrapper for injecting a mock WebSocket in tests.\n * For browser and react-native, the global WebSocket should be avilable.\n */\nexport default globalThis.WebSocket;\n"]}

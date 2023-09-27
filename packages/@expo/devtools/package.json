@@ -1,0 +1,41 @@
+{
+  "name": "@expo/devtools",
+  "version": "0.0.1",
+  "description": "DevTools Plugins API for Expo projects",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "prepare": "yarn run clean && yarn build",
+    "lint": "eslint .",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/expo/expo.git",
+    "directory": "packages/@expo/devtools"
+  },
+  "keywords": [
+    "expo",
+    "devtools"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/expo/expo/issues"
+  },
+  "homepage": "https://github.com/expo/expo/tree/main/packages/@expo/devtools#readme",
+  "files": [
+    "build",
+    "src"
+  ],
+  "dependencies": {
+    "fbemitter": "^3.0.0"
+  },
+  "devDependencies": {
+    "expo-module-scripts": "^3.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
