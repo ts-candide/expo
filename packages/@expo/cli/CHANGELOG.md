@@ -21,6 +21,7 @@
 - Remove `isCSSEnabled` flag from e2e tests ([#24489](https://github.com/expo/expo/pull/24489) by [@marklawlor](https://github.com/marklawlor))
 - Use Metro and web TypeScript types from `expo` instead of `expo-router`. ([#24255](https://github.com/expo/expo/pull/24255) by [@marklawlor](https://github.com/marklawlor))
 - Speed up Metro tests with new resolver. ([#24616](https://github.com/expo/expo/pull/24616) by [@EvanBacon](https://github.com/EvanBacon))
+- Update `expo-router` generated types
 
 ## 0.13.2 — 2023-09-18
 
