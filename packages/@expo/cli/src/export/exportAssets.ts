@@ -12,6 +12,10 @@ import { uniqBy } from '../utils/array';
 
 const debug = require('debug')('expo:export:exportAssets') as typeof console.log;
 
+function mapAssetHashToAssetString(asset: Asset, hash: string) {
+  return 'asset_' + hash + ('type' in asset && asset.type ? '.' + asset.type : '');
+}
+
 /**
  * Resolves the assetBundlePatterns from the manifest and returns a list of assets to bundle.
  *
@@ -21,7 +25,7 @@ export async function resolveAssetBundlePatternsAsync<T extends ExpoConfig>(
   projectRoot: string,
   exp: T,
   assets: Asset[]
-): Promise<Omit<T, 'assetBundlePatterns'> & { bundledAssets?: string[] }> {
+): Promise<Omit<T, 'assetBundlePatterns'> & { bundledAssets?: Set<string> }> {
   if (!exp.assetBundlePatterns?.length || !assets.length) {
     delete exp.assetBundlePatterns;
     return exp;
@@ -42,9 +46,7 @@ export async function resolveAssetBundlePatternsAsync<T extends ExpoConfig>(
       const shouldBundle = shouldBundleAsset(asset, fullPatterns);
       if (shouldBundle) {
         debug(`${shouldBundle ? 'Include' : 'Exclude'} asset ${asset.files?.[0]}`);
-        return asset.fileHashes.map(
-          (hash) => 'asset_' + hash + ('type' in asset && asset.type ? '.' + asset.type : '')
-        );
+        return asset.fileHashes.map((hash) => mapAssetHashToAssetString(asset, hash));
       }
       return [];
     })
@@ -52,7 +54,7 @@ export async function resolveAssetBundlePatternsAsync<T extends ExpoConfig>(
 
   // The assets returned by the RN packager has duplicates so make sure we
   // only bundle each once.
-  (exp as any).bundledAssets = [...new Set(allBundledAssets)];
+  (exp as any).bundledAssets = new Set(allBundledAssets);
   delete exp.assetBundlePatterns;
 
   return exp;
@@ -92,15 +94,29 @@ export async function exportAssetsAsync(
   );
 
   if (assets[0]?.fileHashes) {
+    debug(`Assets = ${JSON.stringify(assets, null, 2)}`);
+    // Updates the manifest to reflect additional asset bundling + configs
+    // Get only asset strings for assets we will save
+    await resolveAssetBundlePatternsAsync(projectRoot, exp, assets);
+    const bundledAssetsSet = (exp as any).bundledAssets;
+    let filteredAssets = assets;
+    if (bundledAssetsSet) {
+      debug(`Bundled assets = ${JSON.stringify([...bundledAssetsSet], null, 2)}`);
+      // Filter asset objects to only ones that include assetBundlePatterns matches
+      filteredAssets = assets.filter(
+        (asset) =>
+          asset.fileHashes.filter((hash) =>
+            bundledAssetsSet.has(mapAssetHashToAssetString(asset, hash))
+          ).length > 0
+      );
+      debug(`Filtered assets count = ${filteredAssets.length}`);
+    }
     Log.log('Saving assets');
-    await saveAssetsAsync(projectRoot, { assets, outputDir });
+    await saveAssetsAsync(projectRoot, { assets: filteredAssets, outputDir });
   }
 
   // Add google services file if it exists
   await resolveGoogleServicesFile(projectRoot, exp);
-
-  // Updates the manifest to reflect additional asset bundling + configs
-  await resolveAssetBundlePatternsAsync(projectRoot, exp, assets);
 
   return { exp, assets };
 }
