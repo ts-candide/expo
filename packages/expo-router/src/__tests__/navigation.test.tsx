@@ -722,3 +722,34 @@ it('can push & replace with nested Slots', async () => {
   expect(screen).toHavePathname('/');
   expect(screen.getByTestId('index')).toBeOnTheScreen();
 });
+
+it('can navigation using explicit event types', () => {
+  renderRouter({
+    _layout: { initialRouteName: 'index', default: () => <Stack /> },
+    index: () => <Text testID="index" />,
+    two: () => <Redirect href="#push:/three" />,
+    three: () => <Text testID="three" />,
+  });
+
+  expect(screen).toHavePathname('/');
+  act(() => router.push('/two'));
+
+  expect(screen).toHavePathname('/three');
+  expect(screen.getByTestId('three')).toBeOnTheScreen();
+
+  expect(screen).toHaveRootState({
+    type: 'stack',
+    index: 2,
+    routes: [{ name: 'index' }, { name: 'two' }, { name: 'three' }],
+  });
+
+  act(() => router.navigateByEvent('popToTop', '/'));
+
+  expect(screen).toHaveRootState({
+    type: 'stack',
+    index: 0,
+    routes: [{ name: 'index' }],
+  });
+
+  expect(screen).toHavePathname('/');
+});

@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/native';
 import { useSyncExternalStore, useMemo, ComponentType, Fragment } from 'react';
 
-import { canGoBack, goBack, linkTo, push, replace, setParams } from './routing';
+import { canGoBack, goBack, linkTo, navigateByEvent, push, replace, setParams } from './routing';
 import { getSortedRoutes } from './sort-routes';
 import { UrlObject, getRouteInfoFromState } from '../LocationProvider';
 import { RouteNode } from '../Route';
@@ -46,6 +46,7 @@ export class RouterStore {
   push = push.bind(this);
   replace = replace.bind(this);
   setParams = setParams.bind(this);
+  navigateByEvent = navigateByEvent.bind(this);
 
   initialize(
     context: RequireContext,
