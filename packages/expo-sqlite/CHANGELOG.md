@@ -9,6 +9,7 @@
 ### 🎉 New features
 
 - [Android] Rewrite implementations from low-level SQLite bindings. ([#24730](https://github.com/expo/expo/pull/24730) by [@kudo](https://github.com/kudo))
+- Introduced `expo-sqlite/next` new APIs. ([#24812](https://github.com/expo/expo/pull/24812) by [@kudo](https://github.com/kudo))
 
 ### 🐛 Bug fixes
 
