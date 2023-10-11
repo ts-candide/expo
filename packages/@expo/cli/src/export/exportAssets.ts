@@ -16,6 +16,13 @@ function mapAssetHashToAssetString(asset: Asset, hash: string) {
   return 'asset_' + hash + ('type' in asset && asset.type ? '.' + asset.type : '');
 }
 
+function assetShouldBeIncludedInExport(asset: Asset, bundledAssetsSet: Set<string>) {
+  return (
+    asset.fileHashes.filter((hash) => bundledAssetsSet?.has(mapAssetHashToAssetString(asset, hash)))
+      .length > 0 ?? false
+  );
+}
+
 /**
  * Resolves the assetBundlePatterns from the manifest and returns a list of assets to bundle.
  *
@@ -103,11 +110,8 @@ export async function exportAssetsAsync(
     if (bundledAssetsSet) {
       debug(`Bundled assets = ${JSON.stringify([...bundledAssetsSet], null, 2)}`);
       // Filter asset objects to only ones that include assetBundlePatterns matches
-      filteredAssets = assets.filter(
-        (asset) =>
-          asset.fileHashes.filter((hash) =>
-            bundledAssetsSet.has(mapAssetHashToAssetString(asset, hash))
-          ).length > 0
+      filteredAssets = assets.filter((asset) =>
+        assetShouldBeIncludedInExport(asset, bundledAssetsSet)
       );
       debug(`Filtered assets count = ${filteredAssets.length}`);
     }
@@ -118,6 +122,16 @@ export async function exportAssetsAsync(
   // Add google services file if it exists
   await resolveGoogleServicesFile(projectRoot, exp);
 
+  bundles.ios?.assets.forEach((asset: any) => {
+    if (!assetShouldBeIncludedInExport(asset, (exp as any).bundledAssets)) {
+      asset.embedded = true;
+    }
+  });
+  bundles.android?.assets.forEach((asset: any) => {
+    if (!assetShouldBeIncludedInExport(asset, (exp as any).bundledAssets)) {
+      asset.embedded = true;
+    }
+  });
   return { exp, assets };
 }
 

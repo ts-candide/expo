@@ -39,11 +39,12 @@ export function createMetadataJson({
             // Collect all of the assets and convert them to the serial format.
             assets: bundle.assets
               .map(
-                (asset) =>
+                (asset: any) =>
                   // Each asset has multiple hashes which we convert and then flatten.
                   asset.fileHashes?.map((hash) => ({
                     path: path.join('assets', hash),
                     ext: asset.type,
+                    embedded: asset.embedded,
                   }))
               )
               .filter(Boolean)
