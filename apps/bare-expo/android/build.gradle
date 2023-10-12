@@ -47,7 +47,7 @@ ext {
 
 allprojects {
     // [Custom]
-    configurations.all {
+    configurations.configureEach {
         if (findProperty("buildReactNativeFromSource") == "true") {
             resolutionStrategy.dependencySubstitution {
                 substitute(module("com.facebook.react:react-native"))
