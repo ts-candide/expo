@@ -13,18 +13,17 @@ import androidx.media3.ui.AspectRatioFrameLayout
 import expo.modules.kotlin.exception.Exceptions
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.util.concurrent.Executors
 
 class VideoModule : Module() {
   private val context: Context
     get() = appContext.reactContext ?: throw Exceptions.ReactContextLost()
-  private val player by lazy {
-    ExoPlayer.Builder(context)
-      .setLooper(Looper.getMainLooper())
-      .build()
-  }
+  private var currentVolume = 1f
 
   override fun definition() = ModuleDefinition {
     Name("ExpoVideo")
@@ -32,6 +31,7 @@ class VideoModule : Module() {
     View(VideoView::class) {
       Prop("player") { view, player: VideoPlayer? ->
         player?.let {
+          view.player = null
           view.player = it.ref
         }
       }
@@ -40,8 +40,15 @@ class VideoModule : Module() {
         view.playerView.useController = nativeControls ?: false
       }
 
-      Prop("contentFit") { view, contentFit: String? ->
-        view.playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+      Prop("contentFit") { view, contentFit: VideoContentFit? ->
+        view.playerView.resizeMode = contentFit?.toAspectRatioFrameLayout()
+          ?: AspectRatioFrameLayout.RESIZE_MODE_FIT
+      }
+
+      AsyncFunction("enterFullscreen") { view: VideoView ->
+      }
+
+      AsyncFunction("exitFullscreen") { view: VideoView ->
       }
 
       OnViewDestroys { view: VideoView ->
@@ -49,15 +56,20 @@ class VideoModule : Module() {
       }
 
       OnViewDidUpdateProps {
-        Log.d("PROPS", "Update")
+        it.playerView.player?.seekTo(0)
       }
     }
 
     Class(VideoPlayer::class) {
       Constructor { source: String? ->
+        val player = ExoPlayer.Builder(context)
+          .setLooper(Looper.getMainLooper())
+          .build()
+
         if (source != null) {
           val item = MediaItem.fromUri(source)
-          appContext.currentActivity?.runOnUiThread {
+          runOnMain {
+            currentVolume = player.volume
             player.clearMediaItems()
             player.addMediaItem(item)
           }
@@ -67,54 +79,60 @@ class VideoModule : Module() {
       }
 
       Property("isPlaying") { player: VideoPlayer ->
-        var isPlaying = false
-        appContext.currentActivity?.runOnUiThread {
-          isPlaying = player.ref.isPlaying
+        return@Property runOnMain {
+          player.ref.isPlaying
         }
-        return@Property isPlaying
       }
 
       Property("isMuted") { player: VideoPlayer ->
-        return@Property player.ref.isDeviceMuted
-      }.set { player: VideoPlayer, isMuted: Boolean? ->
-        appContext.currentActivity?.runOnUiThread {
-          player.ref.setDeviceMuted(isMuted ?: false, 0)
+        return@Property runOnMain {
+          player.ref.volume == 0.0f
+        }
+      }.set { player: VideoPlayer, isMuted: Boolean ->
+        runOnMain {
+          player.ref.volume = if (isMuted) currentVolume else 0.0f
         }
       }
 
       Function("play") { player: VideoPlayer ->
-        appContext.currentActivity?.runOnUiThread {
+        runOnMain {
           player.ref.play()
         }
       }
 
       Function("pause") { player: VideoPlayer ->
-        appContext.currentActivity?.runOnUiThread {
+        runOnMain {
           player.ref.pause()
         }
       }
 
       Function("seekBy") { player: VideoPlayer, seconds: Int ->
-        appContext.currentActivity?.runOnUiThread {
+        runOnMain {
           player.ref.seekTo(player.ref.contentPosition + (seconds * 1000).toLong())
         }
       }
 
       Function("replace") { player: VideoPlayer, source: String ->
         val newItem = MediaItem.fromUri(source)
-        appContext.currentActivity?.runOnUiThread {
-          player.ref.clearMediaItems()
-          player.ref.addMediaItem(newItem)
+        runOnMain {
+          player.ref.replaceMediaItem(0, newItem)
           player.ref.play()
         }
       }
 
       Function("replay") { player: VideoPlayer ->
-        appContext.currentActivity?.runOnUiThread {
+        runOnMain {
           player.ref.seekTo(0)
           player.ref.play()
         }
       }
     }
   }
+
+  private fun <T> runOnMain(block: () -> T) = runBlocking {
+    withContext(Dispatchers.Main) {
+      block()
+    }
+  }
 }
+
