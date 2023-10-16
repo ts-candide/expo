@@ -32,12 +32,10 @@ describe(createMetadataJson, () => {
         ios: {
           assets: [
             {
-              embedded: undefined,
               ext: 'image',
               path: 'assets/foobar',
             },
             {
-              embedded: undefined,
               ext: 'image',
               path: 'assets/other',
             },
